@@ -11,9 +11,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: jdbc:mysql://auth-db/player
+    url: jdbc:mysql://localhost:3306/player
     username: root
-    password: password
+    password: admin
     driver-class-name: com.mysql.jdbc.Driver
 
 # IMPORTANT NOTICE: 
