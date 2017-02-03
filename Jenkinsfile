@@ -9,7 +9,7 @@ node {
 
    stage 'build'
    def workspace = pwd() 
-   cd "${workspace}/server-config/pom.xml"
+   cd "${workspace}/server-config"
    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
    sh "${mvnHome}/bin/mvn package"
    
