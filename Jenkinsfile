@@ -11,6 +11,6 @@ node {
    
    echo "============================================================================================"
    //sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
-   cd ./server-config
+   sh "cd ./server-config"
    sh "pwd"
    }
