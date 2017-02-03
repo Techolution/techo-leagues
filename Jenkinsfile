@@ -8,8 +8,8 @@ node {
    def mvnHome = tool 'mvn'
 
    stage 'build'
+   echo "=============================================================================================================================="
    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
-   sh "echo =============================================================================================================================="
    sh "mvn -f /var/jenkins_home/workspace/test-league-ms/server-config/pom.xml clean install"
    
    
