@@ -11,7 +11,7 @@ node {
    echo "=============================================================================================================================="
    //sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
    cd ./server-config
-   sh "mvn -f /var/jenkins_home/workspace/test-league-ms/server-config/pom.xml clean install"
+   sh "${mvnHome}/bin/mvn clean install"
    
    
    }
