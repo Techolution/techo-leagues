@@ -8,9 +8,8 @@ node {
    def mvnHome = tool 'mvn'
 
    stage 'build'
-   //def workspace = pwd() 
-   //load "${workspace}/server-config"
-   cd server-config
+   def workspace = pwd() 
+   load "${workspace}/server-config/pom.xml"
    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
    sh "${mvnHome}/bin/mvn package"
    
