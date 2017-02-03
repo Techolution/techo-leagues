@@ -9,8 +9,7 @@ node {
 
    stage 'build'
    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
-   sh "cd  ./server-config"
-   sh "mvn clean install"
+   sh "mvn -f /var/jenkins_home/workspace/test-league-ms/server-config/pom.xml clean install"
    
    
    }
