@@ -12,6 +12,6 @@ node {
    echo "==========================####=================================================================="
    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
   // sh "cd ./server-config"
-   sh "${mvnHome}/bin/mvn -f ./server-config/pom.xml package"
+  // sh "${mvnHome}/bin/mvn -f ./server-config/pom.xml package"
    sh "pwd"
    }
