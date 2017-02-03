@@ -10,7 +10,7 @@ node {
    stage 'build'
    
    echo "==========================####=================================================================="
-   sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${env.BUILD_NUMBER}"
+   sh "${mvnHome}/bin/mvn -f ./server-config/pom.xml versions:set -DnewVersion=${env.BUILD_NUMBER}"
   // sh "cd ./server-config"
   // sh "${mvnHome}/bin/mvn -f ./server-config/pom.xml package"
    sh "pwd"
