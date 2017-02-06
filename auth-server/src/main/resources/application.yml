@@ -3,6 +3,8 @@ server:
     context-path: /auth
 
 spring:
+  profiles:
+    active: container
   jpa:
     show-sql: true
     hibernate:
@@ -11,10 +13,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: jdbc:mysql://localhost:3306/player
-    username: root
-    password: admin
-    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${vcap.services.cleardb.[0].credentials.hostname:localhost}:${vcap.services.cleardb.[0].credentials.port:3303}/${vcap.services.cleardb.[0].credentials.name:player}
+    username: ${vcap.services.cleardb.[0].credentials.username:dbuser}
+    password: ${vcap.services.cleardb.[0].credentials.password:password}
+    driver-class-name: com.mysql.jdbc.Driver    
 
 # IMPORTANT NOTICE: 
 # You have to replace this keypair and make sure the private key remains private!
@@ -59,4 +61,20 @@ logging:
     org.springframework.cloud.netflix: INFO
     com.netflix.zuul: INFO
     com.makeurpicks: DEBUG
+
+---    
+spring:
+  profiles: container
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://${MYSQL_PORT_3306_TCP_ADDR:auth-db}:${MYSQL_PORT_3306_TCP_PORT:3306}/${MYSQL_ENV_MYSQL_DATABASE:player}
+    username: ${MYSQL_USER:dbuser}
+    password: ${MYSQL_PASSWORD:password}
+    driver-class-name: com.mysql.jdbc.Driver 
             
