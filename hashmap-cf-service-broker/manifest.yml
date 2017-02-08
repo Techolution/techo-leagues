@@ -1,0 +1,7 @@
+applications:
+- name: cf-service-hashmap
+  memory: 512M
+  path: ./target/cf-service-hashmap-0.0.1.jar
+#  path: ./target/config-server-0.0.1.jar
+#  services:
+#  - hash-db
