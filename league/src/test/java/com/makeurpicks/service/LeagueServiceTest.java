@@ -32,15 +32,17 @@ import com.makeurpicks.exception.LeagueValidationException.LeagueExceptions;
 import com.makeurpicks.repository.LeagueRepository;
 import com.makeurpicks.repository.PlayerLeagueRepository;
 
-@RunWith(MockitoJUnitRunner.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@RunWith(MockitoJUnitRunner.class)
+//@DataJpaTest
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class LeagueServiceTest {
 
 	@Mock
 	public LeagueRepository leagueRepositoryMock;
+	
 	@Mock
 	public PlayerLeagueRepository playerLeagueRepository;
+	
 	@Autowired
 	@InjectMocks
 	public LeagueService leagueService;
