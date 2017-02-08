@@ -9,60 +9,91 @@ services:
       - "8761:8761"
     expose:
       - "8761"
-#  auth-server:
-#    build: ../auth-server/docker
-#    networks:
-#      - myp-network
-#    ports:
-#      - "9999:9999"
-#    expose:
-#      - "9999"
-#    depends_on:
-#      - auth-db
-#      - eureka
   auth-db:  
     image: mysql:latest
-    build: mysql/
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
       - MYSQL_USER=dbuser
       - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=player
-#    volumes:
-#      - mysql-data:/home.scripts  
-#    working_dir: "/home/scripts"
     networks:
       - myp-network
     ports:
-      - "3306:3306"
+      - "3303:3306"
     expose:
-      - "3306"
-  game-db:  
+      - "3303"
+  auth-server:
+    build: ../auth-server/
+    networks:
+      - myp-network
+    ports:
+      - "9999:9999"
+    expose:
+      - "9999"
+    restart: always      
+    links:
+      - auth-db:auth-db
+    depends_on:
+      - auth-db
+      - eureka
+  config-server:
+    build: ../server-config/
+    networks:
+      - myp-network
+    ports:
+      - "8888:8888"
+    expose:
+      - "8888"
+  admin:
+    build: ../admin/
+    networks:
+      - myp-network
+    ports:
+      - "9000:9000"
+    expose:
+      - "9000"
+    links:
+      - eureka:eureka
+      - auth-server:auth-server
+      - config-server:config-server
+    depends_on:
+      - eureka
+      - auth-server
+      - config-server
+    restart: always
+  league-db:  
     image: mysql:latest
-    build: mysql/
     environment:
       - MYSQL_ROOT_PASSWORD=admin123
       - MYSQL_USER=dbuser
       - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=game
-#    volumes:
-#      - mysql-data:/home.scripts  
-#    working_dir: "/home/scripts"
+      - MYSQL_DATABASE=league
     networks:
       - myp-network
     ports:
-      - "3305:3306"
+      - "3304:3306"
     expose:
-      - "3305"    
-  redis:
-    image: redis
+      - "3304"    
+  league:
+    build: ../league/
     networks:
       - myp-network
     ports:
-      - "6379:6379"
+      - "8081:8081"
     expose:
-      - "6379"
-                
+      - "8081"
+    restart: always
+    links:
+      - eureka:eureka
+      - auth-server:auth-server
+      - config-server:config-server
+      - league-db:league-db
+    depends_on:
+      - eureka
+      - auth-server
+      - config-server
+      - league-db
+            
 networks:
   myp-network:
     driver: bridge
@@ -70,3 +101,4 @@ networks:
 volumes:
   mysql-data:
     driver: local    
+      
