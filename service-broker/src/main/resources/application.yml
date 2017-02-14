@@ -1,0 +1,6 @@
+mongodb:
+    host: ds139869.mlab.com
+    port: 39869
+    username: root
+    password: password
+    authdb: baltha
