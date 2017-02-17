@@ -1,14 +1,30 @@
 server:
   port: 8081
-#  context-path: /leagues
+  context-path: /leagues
+security.user.password: testme
 
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+  datasource:
+    url: jdbc:mysql://localhost:3304/league
+    username: root
+    password: admin123
+    driver-class-name: com.mysql.jdbc.Driver
 security:
   oauth2:
     resource:
       jwt:
         key-uri: ${vcap.services.auth-token-key.credentials.uri:http://localhost:9999/auth/oauth/token_key}
-
+  basic:
+    enabled: false
+  user:
+    name: admin
 logging:
   level:
     com.makeurpicks: DEBUG
-#    org.springframework.security: DEBUG
