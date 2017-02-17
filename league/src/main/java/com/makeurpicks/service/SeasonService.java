@@ -15,7 +15,6 @@ import com.makeurpicks.repository.SeasonRepository;
 @Component
 public class SeasonService {
 	
-	@Autowired 
 	private SeasonRepository seasonRepository;
 	
 	
