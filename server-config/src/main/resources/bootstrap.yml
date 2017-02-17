@@ -3,7 +3,24 @@ spring:
    name: config-server
   profiles:
     active: local, cloud
-
+  cloud:
+    config:
+      enabled: true
+      server:
+          git: 
+            uri: https://github.com/tdelesio/config-repo
+            username: ${vcap.mypick.config.repo.username:dinesh-techolution}
+            password: '{cipher}ccbf1e4f5a0ec0a311df3375cb132fab316ebc856f66160ff48938ab51d323c1'
+            searchPaths: /admin**,/league**
+          prefix: /config    
+security:
+  user:
+    password: watchit
+    name: admin     
+encrypt:
+  key: ${ENCRYPT_KEY:defaultkey} 
+server:
+  port: 8888
 #---
 #spring:
 #  profiles: local
