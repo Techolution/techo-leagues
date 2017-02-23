@@ -117,9 +117,19 @@ public class LeagueServiceTest {
 
 	@Test
 	public void createLeague_addPlayerToLeague() {
+		String playerId = UUID.randomUUID().toString();
 		League league = getLeagueFull();
+		
+		PlayerLeague playerLeague = new PlayerLeague(new PlayerLeagueId(league.getId(), playerId));
+		playerLeague.setLeagueId(league.getId());
+		playerLeague.setLeagueName(league.getLeagueName());
+		playerLeague.setPassword(league.getPassword());
+		playerLeague.setPlayerId(playerId);
+		
 		when(leagueRepositoryMock.findOne(UUID.randomUUID().toString())).thenReturn(league);
+		when(leagueRepositoryMock.save(league)).thenReturn(league);
 		leagueService.createLeague(league);
+		verify(playerLeagueRepository.save(playerLeague));		
 	}
 
 	// Method - createLeague(League league) - Negative test cases
@@ -142,6 +152,7 @@ public class LeagueServiceTest {
 	@Test
 	public void updateLeague_leagueDoesnotExist() {
 		expectedEx.expect(LeagueValidationException.class);
+		expectedEx.expectMessage(LeagueExceptions.LEAGUE_NOT_FOUND.toString());
 		League league = getLeagueFull();
 		when(leagueRepositoryMock.findOne(UUID.randomUUID().toString())).thenReturn(null);
 		leagueService.updateLeague(league);
@@ -184,12 +195,13 @@ public class LeagueServiceTest {
 	@Test
 	public void removePlayerFromLeague_invalidLeague() {
 		expectedEx.expect(LeagueValidationException.class);
+		expectedEx.expectMessage(LeagueExceptions.LEAGUE_NOT_FOUND.toString());
 		String playerId = UUID.randomUUID().toString();
 		String leagueId = UUID.randomUUID().toString();
 		when(leagueRepositoryMock.findOne(leagueId)).thenReturn(null);
 		leagueService.removePlayerFromLeague(leagueId, playerId);
 	}
-
+	
 	private League getLeague(String leagueName, String seasonId) {
 
 		League league = null;
