@@ -114,8 +114,16 @@ public class LeagueServiceTest {
 		leagueService.createLeague(league);
 		verify(leagueRepositoryMock).save(league);
 	}
-
-	@Test
+	
+	//Commenting out below two method which I wrote to test the method
+	// addPlayerToLeague(League league, String playerId) and call to 
+	// playerLeagueRepository.save(playerLeague) inside this method
+	
+	//However found that in the method  addPlayerToLeague its creating new instance of
+	//PlayerLeague playerLeague = new PlayerLeague and if we want to verify the output with our object, we can't 
+	// because instance Id of passed by test method and that reurned by method is different
+	
+	//@Test
 	public void createLeague_addPlayerToLeague() {
 		String playerId = UUID.randomUUID().toString();
 		League league = getLeagueFull();
@@ -129,7 +137,23 @@ public class LeagueServiceTest {
 		when(leagueRepositoryMock.findOne(UUID.randomUUID().toString())).thenReturn(league);
 		when(leagueRepositoryMock.save(league)).thenReturn(league);
 		leagueService.createLeague(league);
-		verify(playerLeagueRepository.save(playerLeague));		
+		verify(playerLeagueRepository).save(playerLeague);		
+	}
+	
+	// Method - addPlayerToLeague(League league, String playerId) -
+	//@Test
+	public void addPlayerToLeague_addPlayer() {
+		String playerId = UUID.randomUUID().toString();
+		League league = getLeagueFull();
+		
+		PlayerLeague playerLeague = new PlayerLeague(new PlayerLeagueId(league.getId(), league.getAdminId()));
+		playerLeague.setLeagueId(league.getId());
+		playerLeague.setLeagueName(league.getLeagueName());
+		playerLeague.setPassword(league.getPassword());
+		playerLeague.setPlayerId(playerId);
+		
+		when(leagueService.addPlayerToLeague(league, league.getAdminId())).thenReturn(playerLeague);
+		verify(playerLeagueRepository).save(playerLeague);	
 	}
 
 	// Method - createLeague(League league) - Negative test cases
