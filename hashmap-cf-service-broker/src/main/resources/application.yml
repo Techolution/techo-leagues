@@ -1,0 +1,23 @@
+security:
+  user:
+    name: mojojojo
+    password: secretmojo
+server:
+  port: 8082
+  context-path: /cf-service-hashmap
+spring:
+  profiles:
+    active: cloud 
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+apps.uris: ${vcap.application.uris[0]:localhost}:${server.port}${server.context-path}      
+#  datasource:
+#    url: jdbc:mysql://us-cdbr-iron-east-04.cleardb.net:3306/ad_36b16c1a88afbf9
+#    username: b21fbbb77c71b6
+#    password: 9a5d29f9
+#    driver-class-name: com.mysql.cj.jdbc.Driver
