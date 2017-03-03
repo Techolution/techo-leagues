@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.Season;
 import com.makeurpicks.repository.SeasonRepository;
 
-@Component
+@Service
 public class SeasonService {
 	
 	@Autowired 

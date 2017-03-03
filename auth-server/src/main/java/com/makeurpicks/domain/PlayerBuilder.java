@@ -1,7 +1,5 @@
 package com.makeurpicks.domain;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.makeurpicks.domain.Player.AccountLevels;
 
 public class PlayerBuilder {

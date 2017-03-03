@@ -2,20 +2,20 @@ package com.makeurpicks.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import com.makeurpicks.AdminApplication;
-
-@RunWith(SpringJUnit4ClassRunner.class)
+/*@RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = AdminApplication.class)
-@IntegrationTest
+@IntegrationTest*/
+
+@RunWith(MockitoJUnitRunner.class)
 public class GameRandonizorTest {
 
-	@Autowired 
+//	@Autowired 
+	@Mock
 	private GameRandonizor gameRandomizer;
+	
 	@Test
 	public void test() {
 

@@ -14,6 +14,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class Player implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3487266773799109008L;
+
 	@Id
 	private String username;
 	
