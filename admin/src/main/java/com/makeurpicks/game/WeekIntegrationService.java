@@ -7,7 +7,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,15 +26,25 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
 	@Autowired
     @Qualifier("loadBalancedRestTemplate")
     @LoadBalanced
-    RestTemplate restTemplate;
+    @Bean(name={"loadBalancedRestTemplate"})
+	RestTemplate restTemplate() {
+		  return new RestTemplate();
+		 }
 	
 	@Autowired
+	AuthorizationCodeResourceDetails oAuth2ProtectedResourceDetails;
+	@Autowired
+	OAuth2ClientContext oAuth2ClientContext;
+	 
     @LoadBalanced
-    private OAuth2RestOperations secureRestTemplate;
+    @Bean
+    private OAuth2RestOperations secureRestTemplate(){
+		return new OAuth2RestTemplate(oAuth2ProtectedResourceDetails, oAuth2ClientContext);
+	}
 	
 	public Observable<List<WeekView>> getWeeksForSeason(String id)
 	{
-		return new WeeksBySeasonObservableCommand(id, secureRestTemplate).observe();
+		return new WeeksBySeasonObservableCommand(id, secureRestTemplate()).observe();
 	}
 	
 //	@HystrixCommand(fallbackMethod = "stubWeeks",
@@ -62,6 +76,6 @@ private Log log = LogFactory.getLog(WeekIntegrationService.class);
 //    
     public WeekView createWeek(WeekView weekView)
     {
-    	return secureRestTemplate.postForEntity("http://game/weeks/", weekView, WeekView.class).getBody();
+    	return secureRestTemplate().postForEntity("http://game/weeks/", weekView, WeekView.class).getBody();
     }
 }

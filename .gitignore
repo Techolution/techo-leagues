@@ -38,6 +38,7 @@
 ehthumbs.db
 Thumbs.db
 */target/*
+.classpath
 
 Servers/
 config-repo/

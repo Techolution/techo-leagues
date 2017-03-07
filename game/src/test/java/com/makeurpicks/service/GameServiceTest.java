@@ -2,10 +2,9 @@ package com.makeurpicks.service;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -13,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,7 @@ import com.makeurpicks.repository.WeekRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = GameApplication.class)
+@Ignore
 public class GameServiceTest {
 
 	@Autowired

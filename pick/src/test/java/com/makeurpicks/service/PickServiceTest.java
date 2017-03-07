@@ -1,10 +1,8 @@
 package com.makeurpicks.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -240,7 +239,7 @@ public class PickServiceTest {
 	@Test
 	public void updatePick_pickNotFound_PickValidationExceptionThrown() {
 		
-		expectedEx.expect(RuntimeException.class);
+		expectedEx.expect(PickValidationException.class);
 	    expectedEx.expectMessage(PickExceptions.PICK_IS_NULL.toString());
 	    
 		Pick pick = new Pick();
@@ -364,10 +363,6 @@ public class PickServiceTest {
 		assertTrue(map.size() == 0);
 	}
 	
-	// **************************
-	// Double check if this needs another test for nulls
-	// **************************
-	
 	@Test
 	public void findPicksByWeekAndPlayerTest_noPicksByPlayer_returnEmptyMap() {
 		
@@ -437,12 +432,6 @@ public class PickServiceTest {
 		assertEquals(map.get(gameId).getId(), pickId);
 	}
 	
-	
-
-//	@Test
-//	public void test() {
-//		fail("Not yet implemented");
-//	}
 	@Test
 	public void getOtherPicksByWeekAndPlayerTest_mapFromDSisNull_returnEmptyMap() {
 		
@@ -566,7 +555,7 @@ public class PickServiceTest {
 	@Test
 	public void MakeDoublePickTest_noPickInDS_throwPickIsNullException() {
 		
-		expectedEx.expect(RuntimeException.class);
+		expectedEx.expect(PickValidationException.class);
 	    expectedEx.expectMessage(PickExceptions.PICK_IS_NULL.toString());
 	    
 		String pickId = UUID.randomUUID().toString();
@@ -580,7 +569,7 @@ public class PickServiceTest {
 	@Test
 	public void MakeDoublePickTest_gameHasAlreadyStarted_throwRuntimeException() {
 		
-		expectedEx.expect(RuntimeException.class);
+		expectedEx.expect(PickValidationException.class);
 	    expectedEx.expectMessage(PickExceptions.GAME_HAS_ALREADY_STARTED.toString());
 		
 		String pickId = UUID.randomUUID().toString();
@@ -603,7 +592,7 @@ public class PickServiceTest {
 	@Test
 	public void MakeDoublePickTest_unauthorizedUser_throwRuntimeException() {
 	    
-		expectedEx.expect(RuntimeException.class);
+		expectedEx.expect(PickValidationException.class);
 	    expectedEx.expectMessage(PickExceptions.UNAUTHORIZED_USER.toString());
 	    
 	    String loggedInPlayerId = UUID.randomUUID().toString();
@@ -625,6 +614,7 @@ public class PickServiceTest {
 	}
 	
 	@Test
+	@Ignore
 	public void MakeDoublePickTest_noDoublePickFound_createSaveDoublepick() {
 	    
 	    String loggedInPlayerId = UUID.randomUUID().toString();
@@ -661,7 +651,7 @@ public class PickServiceTest {
 	@Test
 	public void MakeDoublePickTest_originalGameHasAlreadyStarted_throwRuntimeException() {
 	    
-		expectedEx.expect(RuntimeException.class);
+		expectedEx.expect(PickValidationException.class);
 	    expectedEx.expectMessage(PickExceptions.GAME_HAS_ALREADY_STARTED.toString());
 	    
 	    String loggedInPlayerId = UUID.randomUUID().toString();
