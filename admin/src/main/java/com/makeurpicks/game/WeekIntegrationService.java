@@ -2,10 +2,7 @@ package com.makeurpicks.game;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Service;
@@ -16,13 +13,13 @@ import rx.Observable;
 @Service
 public class WeekIntegrationService {
 
-private Log log = LogFactory.getLog(WeekIntegrationService.class);
+	//private Log log = LogFactory.getLog(WeekIntegrationService.class);
 
 	
 	@Autowired
-    @Qualifier("loadBalancedRestTemplate")
+    //@Qualifier("loadBalancedRestTemplate")
     @LoadBalanced
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 	
 	@Autowired
     @LoadBalanced

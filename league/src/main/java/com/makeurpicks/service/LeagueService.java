@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Service;
 
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
@@ -19,17 +17,23 @@ import com.makeurpicks.repository.LeagueRepository;
 import com.makeurpicks.repository.PlayerLeagueRepository;
 import com.makeurpicks.utils.HelperUtils;
 
-@Component
+@Service
 public class LeagueService {
 
-	private LeagueRepository leagueRepository;
-	private PlayerLeagueRepository playerLeagueRepository;
 	@Autowired
+	private LeagueRepository leagueRepository;
+	
+	@Autowired
+	private PlayerLeagueRepository playerLeagueRepository;
+	
+	/*@Autowired
 	public LeagueService(LeagueRepository leagueRepository,PlayerLeagueRepository playerLeagueRepository) {
 		this.leagueRepository=leagueRepository;
 		this.playerLeagueRepository=playerLeagueRepository;
 		
-	}
+	}*/
+	
+	
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
 		/*String id = UUID.randomUUID().toString();

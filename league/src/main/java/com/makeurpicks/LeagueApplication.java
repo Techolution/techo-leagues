@@ -2,28 +2,23 @@ package com.makeurpicks;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableResourceServer
+//@EnableResourceServer
 public class LeagueApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(LeagueApplication.class, args);
 	}
 
-	@Configuration
+	/*@Configuration
     @EnableWebSecurity
-    @EnableGlobalMethodSecurity(prePostEnabled = true)
+    @EnableGlobalMethodSecurity(prePostEnabled = true)*/
     protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
