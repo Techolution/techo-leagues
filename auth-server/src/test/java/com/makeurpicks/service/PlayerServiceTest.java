@@ -1,8 +1,11 @@
 package com.makeurpicks.service;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,14 +16,15 @@ import com.makeurpicks.AuthServerApplication;
 import com.makeurpicks.domain.Player;
 import com.makeurpicks.domain.PlayerBuilder;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringApplicationConfiguration(classes = AuthServerApplication.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = AuthServerApplication.class)
+@Ignore
 public class PlayerServiceTest {
 
-	@Autowired
+	@InjectMocks
 	private PlayerService playerService;
 	
-	@Autowired
+	@Mock
 	private PasswordEncoder encoder;
 	
 	@Test

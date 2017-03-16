@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,10 @@ import com.makeurpicks.domain.LeagueType;
 import com.makeurpicks.domain.PlayerLeague;
 import com.makeurpicks.service.LeagueService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "/leagues")
 public class LeagueController {
 
 	private Log log = LogFactory.getLog(LeagueController.class);
@@ -37,13 +38,14 @@ public class LeagueController {
 	 * @PreAuthorize("hasRole('ADMIN')") public Principal resource(Principal
 	 * principal) { return principal; }
 	 */
-
-	@RequestMapping(method = RequestMethod.GET, value = "/")
+	
+	@ApiOperation(value = "getAllLeague", nickname = "getAllLeague")
+	@RequestMapping(method = RequestMethod.GET, path = "/", produces = "application/json")
 	public @ResponseBody Iterable<League> getAllLeague() {
 		return leagueService.getAllLeagues();
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/types")
 	public @ResponseBody LeagueType[] getLeagueTypes() {
 		return LeagueType.values();
@@ -54,15 +56,14 @@ public class LeagueController {
 	public @ResponseBody League getLeagueById(@PathVariable String id) {
 		return leagueService.getLeagueById(id);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/seasons/{seasonId}")
 	public @ResponseBody List<League> getLeagueBySeasonId(@PathVariable String seasonId) {
 		return leagueService.getLeagueBySeasonId(seasonId);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/")
-	public @ResponseBody League createLeague(Principal user,
-			@RequestBody League league) {
+	public @ResponseBody League createLeague(Principal user, @RequestBody League league) {
 		league.setAdminId(user.getName());
 		return leagueService.createLeague(league);
 
@@ -79,16 +80,16 @@ public class LeagueController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/player")
-	public void addPlayerToLeague(Principal user,@RequestBody PlayerLeague playerLeague) {
-		/*if (authorization != null && authorization.startsWith("Basic")) {
-			// Authorization: Basic base64credentials
-			String base64Credentials = authorization.substring("Basic".length()).trim();
-			String credentials = new String(Base64.getDecoder().decode(base64Credentials),
-					Charset.forName("UTF-8"));
-			// credentials = username:password
-			final String[] values = credentials.split(":", 2);
-			playerLeague.setPlayerId(values[0]);
-		}*/
+	public void addPlayerToLeague(Principal user, @RequestBody PlayerLeague playerLeague) {
+		/*
+		 * if (authorization != null && authorization.startsWith("Basic")) { //
+		 * Authorization: Basic base64credentials String base64Credentials =
+		 * authorization.substring("Basic".length()).trim(); String credentials
+		 * = new String(Base64.getDecoder().decode(base64Credentials),
+		 * Charset.forName("UTF-8")); // credentials = username:password final
+		 * String[] values = credentials.split(":", 2);
+		 * playerLeague.setPlayerId(values[0]); }
+		 */
 		playerLeague.setPlayerId(user.getName());
 		leagueService.joinLeague(playerLeague);
 	}

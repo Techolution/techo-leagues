@@ -1,14 +1,17 @@
 server:
-  port: 8081
-#  context-path: /leagues
+  port: 8087
+  #context-path: /leagues
 
 security:
-  oauth2:
-    resource:
-      jwt:
-        key-uri: ${vcap.services.auth-token-key.credentials.uri:http://localhost:9999/auth/oauth/token_key}
+ # oauth2:
+  #  resource:
+  #    jwt:
+  #      key-uri: ${vcap.services.auth-token-key.credentials.uri:http://localhost:9999/auth/oauth/token_key}
+  user:
+    name: admin
+    password: admin
 
 logging:
   level:
     com.makeurpicks: DEBUG
-#    org.springframework.security: DEBUG
+    org.springframework.security: DEBUG
