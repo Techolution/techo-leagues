@@ -35,7 +35,7 @@ zuul:
       stripPrefix: false
     season:
       path: /seasons/**
-      serviceId: season
+      serviceId: league
       stripPrefix: false
     team:
       path: /teams/**
@@ -48,9 +48,9 @@ zuul:
     game:
       path: /games/**
       stripPrefix: false
-#    player:
-#      path: /register/auth/players/**
-#      stripPrefix: true
+    player:
+      path: /register/auth/players/**
+      stripPrefix: true
 
             
 logging:

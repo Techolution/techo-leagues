@@ -3,6 +3,7 @@ package com.makeurpicks.service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,8 +33,8 @@ public class LeagueService {
 	}
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
-		/*String id = UUID.randomUUID().toString();
-		league.set(id);*/
+		String id = UUID.randomUUID().toString();
+		league.setId(id);
 		leagueRepository.save(league);
 		addPlayerToLeague(league, league.getAdminId());
 		return league;

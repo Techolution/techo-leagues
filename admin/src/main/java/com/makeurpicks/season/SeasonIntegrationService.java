@@ -32,7 +32,7 @@ private Log log = LogFactory.getLog(SeasonIntegrationService.class);
     public List<SeasonView> getCurrentSeasons()
     {
     	ParameterizedTypeReference<List<SeasonView>> responseType = new ParameterizedTypeReference<List<SeasonView>>() {};
-    	List<SeasonView> seasons = secureRestTemplate.exchange("http://season/seasons/current", HttpMethod.GET, null, responseType).getBody();
+    	List<SeasonView> seasons = secureRestTemplate.exchange("http://league/seasons/current", HttpMethod.GET, null, responseType).getBody();
     	return seasons;
     }
 }

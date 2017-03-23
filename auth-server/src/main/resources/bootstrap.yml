@@ -1,6 +1,6 @@
 spring:
   application:
-    name: player
+    name: auth-db
 #  cloud:
 #    config:
 #      uri: ${vcap.services.config-service.credentials.uri:http://127.0.0.1:8888}
