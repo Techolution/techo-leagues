@@ -5,29 +5,21 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
-import java.time.Clock;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.makeurpicks.PicksApplication;
 import com.makeurpicks.domain.DoublePick;
@@ -37,14 +29,13 @@ import com.makeurpicks.exception.PickValidationException;
 import com.makeurpicks.exception.PickValidationException.PickExceptions;
 import com.makeurpicks.game.GameIntegrationService;
 import com.makeurpicks.game.GameResponse;
-import com.makeurpicks.league.LeagueIntegrationService;
-import com.makeurpicks.league.LeagueResponse;
 import com.makeurpicks.repository.DoublePickRepository;
 import com.makeurpicks.repository.PickRepository;
 import com.makeurpicks.repository.PicksByWeekRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = PicksApplication.class)
+@Ignore
 //@IntegrationTest({ "server.port:0", "spring.cloud.config.enabled:true" })
 //@WebAppConfiguration
 public class PickServiceTestOld {
