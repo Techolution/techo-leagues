@@ -22,14 +22,19 @@ import com.makeurpicks.utils.HelperUtils;
 @Component
 public class LeagueService {
 
-	private LeagueRepository leagueRepository;
-	private PlayerLeagueRepository playerLeagueRepository;
 	@Autowired
-	public LeagueService(LeagueRepository leagueRepository,PlayerLeagueRepository playerLeagueRepository) {
-		this.leagueRepository=leagueRepository;
-		this.playerLeagueRepository=playerLeagueRepository;
-		
+	private LeagueRepository leagueRepository;
+
+	@Autowired
+	private PlayerLeagueRepository playerLeagueRepository;
+
+	@Autowired
+	public LeagueService(LeagueRepository leagueRepository,
+						 PlayerLeagueRepository playerLeagueRepository) {
+		this.leagueRepository = leagueRepository;
+		this.playerLeagueRepository = playerLeagueRepository;
 	}
+
 	public League createLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
 		/*String id = UUID.randomUUID().toString();
@@ -39,7 +44,7 @@ public class LeagueService {
 		return league;
 	}
 
-	public League updateLeague(League league) throws LeagueValidationException {
+	public League  updateLeague(League league) throws LeagueValidationException {
 		validateLeague(league);
 		League leagueDS = leagueRepository.findOne(league.getId());
 		if (leagueDS == null)
@@ -56,31 +61,26 @@ public class LeagueService {
 		List<League> leagues = leagueRepository.findAll(leagueIds);
 		return HelperUtils.getLeagueNameFromLeagues(leagues);
 	}
-	
+
 	public Set<String> getPlayersInLeague(String leagueid) throws LeagueValidationException {
 		 return new HashSet<String> (playerLeagueRepository.findIdPlayerIdsByIdLeagueId(leagueid));
-		
+
 	}
 
-	public void joinLeague(PlayerLeague playerLeague)
-	{
-		if (playerLeague.getLeagueId() == null)
-		{
-			if (playerLeague.getLeagueName()==null)
-			{
+	public void joinLeague(PlayerLeague playerLeague) {
+		if (playerLeague.getLeagueId() == null) {
+			if (playerLeague.getLeagueName() == null) {
 				throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
-			}
-			else
-			{
+			} else {
 				League league = getLeagueByName(playerLeague.getLeagueName());
 				if (league == null)
 					throw new LeagueValidationException(LeagueExceptions.LEAGUE_NOT_FOUND);
 				playerLeague.setLeagueId(league.getId());
 			}
 		}
-		
+
 		joinLeague(playerLeague.getLeagueId(), playerLeague.getPlayerId(), playerLeague.getPassword());
-	
+
 	}
 
 	protected void joinLeague(String leagueId, String playerId, String password) throws LeagueValidationException {
@@ -99,7 +99,7 @@ public class LeagueService {
 		addPlayerToLeague(league, playerId);
 
 	}
-	
+
 	 PlayerLeague addPlayerToLeague(League league, String playerId)
 	{
 		//TODO: need to create playerleague builder
@@ -114,7 +114,7 @@ public class LeagueService {
 	public League getLeagueById(String leagueId) {
 		return leagueRepository.findOne(leagueId);
 	}
-	
+
 	public League getLeagueByName(String leagueName) {
 		return leagueRepository.findByLeagueName(leagueName);
 	}
@@ -137,12 +137,12 @@ public class LeagueService {
 		PlayerLeague playerLeague = playerLeagueRepository.findByIdLeagueIdAndIdPlayerId(league.getId(),playerId);
 		if(playerLeague!=null)
 			playerLeagueRepository.delete(playerLeague);
-		
+
 	}
-	
+
 	/*
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	protected void validateLeague(League league) throws LeagueValidationException {
 		if (league.getLeagueName() == null || league.getLeagueName().equals(""))
@@ -171,7 +171,7 @@ public class LeagueService {
 			return true;
 	}
 
-	
+
 	protected boolean isValidPlayer(String playerId) {
 		// InstanceInfo instance =
 		// discoveryClient.getNextServerFromEureka("player", false);
@@ -179,13 +179,13 @@ public class LeagueService {
 //				.path("player").path("/id/").path(playerId).build().encode()
 //				.toUri();
 
-		
+
 //		ServiceInstance instance = loadBalancer.choose("player");
 //		URI uri = UriComponentsBuilder.fromHttpUrl(String.format("http://%s:%d",
 //				instance.getHost(), instance.getPort()))
 //				.path("player").path("/id/").path(playerId).build().encode()
 //				.toUri();
-				
+
 
 //		RestTemplate restTemplate = new RestTemplate();
 //		
@@ -200,8 +200,8 @@ public class LeagueService {
 //			return false;
 
 	}
-	
-	
+
+
 	public Iterable<League> getAllLeagues()
 	{
 		return leagueRepository.findAll();
@@ -218,11 +218,11 @@ public class LeagueService {
 		{
 			try {removePlayerFromLeague(leagueId, playerId);} catch (Exception e) {e.getMessage();}
 		}
-		
+
 		leagueRepository.delete(leagueId);
 	}
 	public List<League> getLeagueBySeasonId(String seasonId) {
 		return leagueRepository.findLeagueBySeasonId(seasonId);
 	}
-	
+
 }

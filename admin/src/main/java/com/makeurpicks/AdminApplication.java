@@ -10,11 +10,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +33,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.header.HeaderWriterFilter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.util.WebUtils;
@@ -93,5 +96,25 @@ public class AdminApplication {
             return repository;
         }
 
+    }
+
+    @Bean("loadBalancedRestTemplate")
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+	    return new RestTemplate();
+    }
+
+
+
+    @Autowired
+    private OAuth2ClientContext oAuth2ClientContext;
+
+    @Autowired
+    private OAuth2ProtectedResourceDetails oAuth2ProtectedResourceDetails;
+    
+    @Bean
+    @LoadBalanced
+    OAuth2RestOperations secureRestTemplate() {
+        return new OAuth2RestTemplate(oAuth2ProtectedResourceDetails, oAuth2ClientContext);
     }
 }

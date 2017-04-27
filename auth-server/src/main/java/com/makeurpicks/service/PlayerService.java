@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,14 +19,19 @@ import com.makeurpicks.exception.PlayerValidationException;
 import com.makeurpicks.exception.PlayerValidationException.PlayerExceptions;
 
 @Service
+@Configurable
 public class PlayerService implements UserDetailsService {
 
-	@Autowired
 	private PlayerDao playerDao;
 	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
+	@Autowired
+	public PlayerService(PlayerDao playerDao, PasswordEncoder passwordEncoder) {
+		this.playerDao = playerDao;
+		this.passwordEncoder = passwordEncoder;
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Player player = playerDao.findByUsername(username);
@@ -78,5 +84,4 @@ public class PlayerService implements UserDetailsService {
 		if (!codes.isEmpty())
 			throw new PlayerValidationException(codes.toArray(new PlayerExceptions[codes.size()]));
 	}
-
 }

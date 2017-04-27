@@ -47,7 +47,7 @@ public class Authority implements GrantedAuthority{
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
-	
+
+
 
 }

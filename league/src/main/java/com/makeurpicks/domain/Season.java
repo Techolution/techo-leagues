@@ -1,14 +1,20 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 
+@Entity
 public class Season implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1686980214059945687L;
-	
+
+	@Id
+	@GeneratedValue
 	private String id;
 
 

@@ -1,22 +1,22 @@
 version: "2"
 
 services:
-  config-server:
-    build: ../server-config/
-    networks:
-      - myp-network
-    ports:
-      - "8888:8888"
-    expose:
-      - "8888"
-  eureka:
-    image: springcloud/eureka
-    networks:
-      - myp-network
-    ports:
-      - "8761:8761"
-    expose:
-      - "8761"
+#  config-server:
+#    build: ../server-config/
+#    networks:
+#      - myp-network
+#    ports:
+#      - "8888:8888"
+#    expose:
+#      - "8888"
+#  eureka:
+#    image: springcloud/eureka
+#    networks:
+#      - myp-network
+#    ports:
+#      - "8761:8761"
+#    expose:
+#      - "8761"
 #  auth-server:
 #    build: ../auth-server/docker
 #    networks:
@@ -62,23 +62,23 @@ services:
       - "3304:3306"
     expose:
       - "3304"
-#  game-db:  
-#    image: mysql:latest
-#    build: mysql/
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=admin123
-#      - MYSQL_USER=dbuser
-#      - MYSQL_PASSWORD=password
-#      - MYSQL_DATABASE=game
-#    volumes:
-#      - mysql-data:/home.scripts  
-#    working_dir: "/home/scripts"
-#    networks:
-#      - myp-network
-#    ports:
-#      - "3305:3306"
-#    expose:
-#      - "3305"    
+  game-db:
+    image: mysql:latest
+    #build: mysql/
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin123
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=game
+    volumes:
+      - mysql-data:/home.scripts
+    working_dir: "/home/scripts"
+    networks:
+      - myp-network
+    ports:
+      - "3305:3306"
+    expose:
+      - "3305"
   redis:
     image: redis
     networks:

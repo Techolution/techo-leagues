@@ -1,9 +1,14 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 
 public class AbstractModel implements Serializable {
 
+	@Id
+	@GeneratedValue
 	protected String id;
 
 	public String getId() {
