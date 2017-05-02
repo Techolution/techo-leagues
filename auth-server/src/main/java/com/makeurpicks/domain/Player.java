@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +17,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class Player implements UserDetails {
 
+	private static final long serialVersionUID = -7163821409127512437L;
+
+	@GeneratedValue
 	@Id
+	private String id;
+	
 	private String username;
 	
 	private String email;
@@ -28,7 +36,7 @@ public class Player implements UserDetails {
 	
 	private String accountLevel = "user";
 	
-//	@OneToMany(cascade=CascadeType.ALL, mappedBy="authority")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="authority")
 	@Transient
 	private List<GrantedAuthority> authorities;
 	
@@ -37,19 +45,13 @@ public class Player implements UserDetails {
 		return authorities;
 	}
 	
-	public void addAuthority(Authority authority)
-	{
+	public void addAuthority(Authority authority) {
 		if (authorities == null)
 			authorities = new ArrayList<>();
 		
 		authorities.add(authority);
 	}
 	
-	
-	
-
-
-
 	public void setAuthorities(List<GrantedAuthority> authorities) {
 		this.authorities = authorities;
 	}
@@ -64,13 +66,13 @@ public class Player implements UserDetails {
 		return true;
 	}
 
-//	public String getId() {
-//		return id;
-//	}
-//
-//	public void setId(String id) {
-//		this.id = id;
-//	}
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getUsername() {
 		return username;
@@ -135,8 +137,4 @@ public class Player implements UserDetails {
 	public void setAccountLevel(String accountLevel) {
 		this.accountLevel = accountLevel;
 	}
-	
-	
-	
-	
 }

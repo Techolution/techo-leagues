@@ -1,7 +1,5 @@
 package com.makeurpicks.domain;
 
-import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 public class Authority implements GrantedAuthority{
+
+	private static final long serialVersionUID = -4070053428969346269L;
 
 	@GeneratedValue
 	@Id
@@ -47,7 +47,4 @@ public class Authority implements GrantedAuthority{
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
-	
-
 }

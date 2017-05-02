@@ -10,8 +10,12 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * @author tarun
+ *
+ */
 @Configuration
-public class GameConfig {
+public class GateWayConfig {
 
 	@Autowired
 	private OAuth2ClientContext oAuth2ClientContext;
@@ -30,4 +34,6 @@ public class GameConfig {
 	public OAuth2RestOperations getSecureRestTemplate(){
 		return new OAuth2RestTemplate(resource,oAuth2ClientContext);
 	}
+
+
 }
