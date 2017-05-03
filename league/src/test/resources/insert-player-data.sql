@@ -1,0 +1,1 @@
+INSERT INTO player_league (league_id, player_id, league_name,password) VALUES ('1', '1', 'test league','abc');

@@ -1,174 +1,256 @@
 package com.makeurpicks.controller;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.gson.Gson;
+import com.makeurpicks.domain.League;
+import com.makeurpicks.domain.PlayerLeague;
+import com.makeurpicks.domain.PlayerLeagueId;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockServletContext;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.makeurpicks.LeagueApplication;
-import com.makeurpicks.domain.League;
-import com.makeurpicks.domain.LeagueBuilder;
-import com.makeurpicks.service.LeagueService;
+import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.ServletContext;
+
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
+@SpringBootTest
 @WebAppConfiguration
-@SpringApplicationConfiguration(classes = LeagueApplication.class)
+@ContextConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 public class LeagueControllerTest {
 
-	@InjectMocks
-	private LeagueController leagueController;
-	
-	@Mock
-	private LeagueService leagueService;
-	
-	private MockMvc mockMvc;
-	
-	private League league1;
-	private League league2;
-	private League league3;
-	@Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
- 
-        mockMvc = MockMvcBuilders.standaloneSetup(leagueController).build();
- 
-        stubData();
-//        when(validator.supports(any(Class.class))).thenReturn(true);
+
+    private final String LEAGUE_DATA = "{\"id\":\"1\",\"leagueName\":\"test league\",\"paidFor\":0," +
+            "\"money\":true,\"free\":false,\"active\":true,\"password\":\"test\",\"spreads\":true," +
+            "\"doubleEnabled\":true,\"entryFee\":10.0,\"weeklyFee\":100.0," +
+            "\"firstPlacePercent\":10,\"secondPlacePercent\":10,\"thirdPlacePercent\":10," +
+            "\"fourthPlacePercent\":10,\"fifthPlacePercent\":10,\"doubleType\":1,\"banker\":true,\"seasonId\":\"1\",\"adminId\":\"1\"}";
+
+    private final String LEAGUES_DATA = "[{\"id\":\"1\",\"leagueName\":\"test league\",\"paidFor\":0," +
+            "\"money\":true,\"free\":false,\"active\":true,\"password\":\"test\",\"spreads\":true," +
+            "\"doubleEnabled\":true,\"entryFee\":10.0,\"weeklyFee\":100.0," +
+            "\"firstPlacePercent\":10,\"secondPlacePercent\":10,\"thirdPlacePercent\":10," +
+            "\"fourthPlacePercent\":10,\"fifthPlacePercent\":10,\"doubleType\":1,\"banker\":true,\"seasonId\":\"1\",\"adminId\":\"1\"}]";
+
+    private final String PLAYER_DATA = "[{\"leagueName\":\"test league\",\"leagueId\":\"1\",\"seasonId\":\"1\"}]";
+
+    private Gson gson = new Gson();
+
+    private League league;
+
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() throws Exception {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+        league = gson.fromJson(LEAGUE_DATA, League.class);
     }
-	
-	private void stubData()
-	{
 
-			String player1Id = "1";
-			String player2Id = "2";
-			String player3Id = "3";
-			String player4Id = "4";
-			String player5Id = "5";
-			
-		league1 = new LeagueBuilder()
-				.withAdminId(player1Id)
-				.withName("pickem")
-				.withPassword("football")
-				.withSeasonId("1")
-				.build();
-				
-				league2 = new LeagueBuilder()
-				.withAdminId(player1Id)
-				.withName("suicide")
-				.withPassword("football")
-				.withSeasonId("1")
-				.build();
-				
-				league3 = new LeagueBuilder()
-				.withAdminId(player1Id)
-				.withName("superbowl")
-				.withPassword("football")
-				.withSeasonId("1")
-				.build();
-			
-				List<League> allLeagues = new ArrayList<>();
-				allLeagues.add(league1);
-				allLeagues.add(league2);
-				allLeagues.add(league3);
-				
-				when(leagueService.getAllLeagues()).thenReturn(allLeagues);
-				when(leagueService.getLeagueById(league1.getId())).thenReturn(league1);
-				when(leagueService.getLeagueById(league2.getId())).thenReturn(league2);
-				when(leagueService.getLeagueById(league3.getId())).thenReturn(league3);
-				
-	}
-	 
-	 //"/"
-	 @Test
-	public void getAllLeague() throws Exception {
+    @Test
+    public void givenWac_whenServletContext_thenItProvidesLeagueController() {
+        ServletContext servletContext = wac.getServletContext();
 
-		 mockMvc.perform(get("/leagues/"))
-         .andExpect(status().isOk())
-//         .andExpect(jsonPath("$.id", containsString(league1.getId())))
-         .andDo(print());
-         
-		
-	}
-	 
-//	 @RequestMapping(method=RequestMethod.GET, value="/{id}")
-//	 public @ResponseBody League getLeagueById(@PathVariable String id)
-//	 {
-//		return leagueService.getLeagueById(id);
-//	 }
-//	 
-//	@RequestMapping(method=RequestMethod.POST, value="/")
-//	public @ResponseBody League createLeague(Principal user, @RequestBody League league) {
-//
-//		if (league != null && league.getAdminId() == null)
-//			league.setAdminId(user.getName());
-//		
-//		return leagueService.createLeague(league);
-//	
-//	}
-//
-//	@RequestMapping(method=RequestMethod.PUT, value="/")
-//	 public @ResponseBody League updateLeague(@RequestBody League league)
-//	 {
-//		return leagueService.updateLeague(league);
-//	 }
-//	
-//	
-//	@RequestMapping(method=RequestMethod.GET, value="/player/{id}")
-//	public @ResponseBody Set<LeagueName> getLeaguesForPlayer(@PathVariable String id)
-//	{ 
-//		return leagueService.getLeaguesForPlayer(id);
-//	}
-//	
-//	@RequestMapping(method=RequestMethod.POST, value="/player")
-//	public void addPlayerToLeague(@RequestBody PlayerLeague playerLeague, Principal principal)
-//	{
-//		playerLeague.setPlayerId(principal.getName());
-//		
-//		log.debug("playerLeague ="+ playerLeague.toString());
-//		
-//		leagueService.joinLeague(playerLeague);
-//	
-//	}
-//	
-//	@RequestMapping(method=RequestMethod.POST, value="/player/admin")
-//	@PreAuthorize("hasRole('ADMIN')")
-//	public void addPlayerToLeague(@RequestBody PlayerLeague playerLeague)
-//	{
-//		log.debug("playerLeague ="+ playerLeague.toString());
-//		
-//		leagueService.joinLeague(playerLeague);
-//	
-//	}
-//	
-//	@RequestMapping(method=RequestMethod.GET, value="/name/{name}",produces = MediaType.APPLICATION_JSON)
-//	 public @ResponseBody League getLeagueByName(@PathVariable String name)
-//	 {
-//		return leagueService.getLeagueByName(name);
-//	 }
-//	
-//	@RequestMapping(method=RequestMethod.DELETE, value="/player")
-//	 public void removePlayerFromLeagye(@RequestBody PlayerLeague playerLeague)
-//	 {
-//		leagueService.removePlayerFromLeagye(playerLeague.getLeagueId(), playerLeague.getPlayerId());
-//	 }
-//	
-//	@RequestMapping(method=RequestMethod.GET, value="/player/leagueid/{leagueid}")
-//	 public @ResponseBody Set<String> getPlayersInLeague(@PathVariable String leagueid)
+        Assert.assertNotNull(servletContext);
+        Assert.assertTrue(servletContext instanceof MockServletContext);
+        Assert.assertNotNull(wac.getBean("leagueController"));
+    }
+
+
+    @Test
+    public void givenBaseURI_WhenNoLeaguesExist_thenResponseOkWithNoContent() throws Exception {
+        this.mockMvc.perform(get("/")).andExpect(status().isOk())
+                .andExpect(content().string("[]"));
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenBaseURI_WhenLeaguesExist_ExpectAllLeaguesToBeReturned() throws Exception {
+        this.mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    @Test
+    public void givenLeagueTypesUriWithGet_thenResponseOk() throws Exception {
+        this.mockMvc.perform(get("/types"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().string("[\"pickem\",\"suicide\"]"));
+
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenGetLeagueByIDUri_WhenLeagueIdNotExists_thenResponseOk() throws Exception {
+
+        this.mockMvc.perform(get("/{id}", "1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().string(LEAGUE_DATA));
+
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenGetLeagueByIDUri_WhenLeagueIdExists_thenResponseOk() throws Exception {
+
+        this.mockMvc.perform(get("/{id}", "2"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenGetSeasonByIDUri_WhenSeasonIdExists_thenResponseOk() throws Exception {
+
+        this.mockMvc.perform(get("/seasons/{seasonId}", "1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(LEAGUES_DATA));
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenGetSeasonByIDUri_WhenSeasonIdNotExists_thenResponseOk() throws Exception {
+
+        this.mockMvc.perform(get("/seasons/{seasonId}", "2"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
+
+    }
+
+    @Test
+    @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    public void givenBaseUriWithPost_ExpectsLeagueToBeCreated() throws Exception {
+        this.mockMvc.perform(post("/").principal(() -> "TEST_PRINCIPAL")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(LEAGUE_DATA))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.id").value("1"));
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenBaseUriWithPut_ExpectsLeagueToBeUpdated() throws Exception {
+
+        this.mockMvc.perform(put("/")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(LEAGUE_DATA))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.name").value("test league"));
+    }
+
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/insert-player-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-player-data.sql", executionPhase = AFTER_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenPlayerUriWithGet_WhenPlayerIdExists_ReturnsPlayerLeague() throws Exception {
+
+        this.mockMvc.perform(get("/player/{id}", "1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().string(PLAYER_DATA));
+
+    }
+
+    @Test
+    public void givenPlayerUriWithGet_WhenPlayerIdNotExists_ExpectsEmptyArray() throws Exception {
+
+        this.mockMvc.perform(get("/player/{id}", "1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().string("[]"));
+
+    }
+
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenLeagueNameURIWithGet_WhenLeagueNameExists_ExpectsLeagueToBeReturned() throws Exception {
+
+        this.mockMvc.perform(get("/name/{name}", "test league")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(content().string(LEAGUE_DATA));
+    }
+
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+    })
+    public void givenDeleteLeagueUriWithId_whenIdExists_thenVerifyResponseOk() throws Exception {
+
+        this.mockMvc.perform(delete("/{id}", "1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE));
+    }
+
+    @Test
+    @SqlGroup({
+            @Sql(scripts = "/insert-league-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/insert-player-data.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(scripts = "/delete-league-data.sql", executionPhase = AFTER_TEST_METHOD)
+    })
+    public void givenDeletePlayerLeagueUriWithId_whenIdExists_thenVerifyResponseOk() throws Exception {
+
+        final PlayerLeagueId playerLeagueId = new PlayerLeagueId("1", "1");
+        final PlayerLeague playerLeague =  new PlayerLeague(playerLeagueId);
+
+        this.mockMvc.perform(delete("/player")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(gson.toJson(playerLeague)))
+                .andExpect(status().isOk());
+    }
+
 }

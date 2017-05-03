@@ -1,0 +1,1 @@
+delete from l eague.league where id="1";
