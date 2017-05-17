@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.makeurpicks.domain.League;
 import com.makeurpicks.domain.LeagueName;
 import com.makeurpicks.domain.PlayerLeague;
-import com.makeurpicks.domain.PlayerLeagueId;
+"import com.makeurpicks.domain.PlayerLeagueId;
 import com.makeurpicks.exception.LeagueValidationException;
 import com.makeurpicks.repository.LeagueRepository;
 import com.makeurpicks.repository.PlayerLeagueRepository;
@@ -54,7 +54,7 @@ public class LeagueServiceTest {
 		leagueService = new LeagueService(leagueRepository, playerLeagueRepository);
 
 		league = new League();
-		league.setId(1001L);
+		league.setId("1001");
 		league.setLeagueName("Indian Cricket League");
 		league.setPassword("password");
 		league.setSeasonId("101");
