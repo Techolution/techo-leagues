@@ -23,7 +23,7 @@ import com.makeurpicks.domain.PlayerLeague;
 import com.makeurpicks.service.LeagueService;
 
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "/leagues")
 public class LeagueController {
 
 	private Log log = LogFactory.getLog(LeagueController.class);

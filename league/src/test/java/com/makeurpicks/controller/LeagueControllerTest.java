@@ -56,7 +56,7 @@ public class LeagueControllerTest {
 	private void stubData()
 	{
 
-			String player1Id = "1";
+			String player1Id = "101";
 			String player2Id = "2";
 			String player3Id = "3";
 			String player4Id = "4";
@@ -89,9 +89,9 @@ public class LeagueControllerTest {
 				allLeagues.add(league3);
 				
 				when(leagueService.getAllLeagues()).thenReturn(allLeagues);
-				when(leagueService.getLeagueById(league1.getId())).thenReturn(league1);
-				when(leagueService.getLeagueById(league2.getId())).thenReturn(league2);
-				when(leagueService.getLeagueById(league3.getId())).thenReturn(league3);
+				when(leagueService.getLeagueById(league1.getId().toString())).thenReturn(league1);
+				when(leagueService.getLeagueById(league2.getId().toString())).thenReturn(league2);
+				when(leagueService.getLeagueById(league3.getId().toString())).thenReturn(league3);
 				
 	}
 	 
