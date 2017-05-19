@@ -9,21 +9,29 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.header.HeaderWriterFilter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.RequestContextFilter;
 import org.springframework.web.util.WebUtils;
@@ -38,6 +46,24 @@ public class GatewayApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayApplication.class, args);
+	}
+	
+	@Bean("loadBalancedRestTemplate")
+	@LoadBalanced
+	RestTemplate getRestTemplate(){
+		return new RestTemplate();
+	}
+	
+	@Autowired
+	private OAuth2ClientContext oAuth2ClientContext;
+	
+	@Autowired
+	private OAuth2ProtectedResourceDetails resource;
+	
+	@Bean
+	@LoadBalanced
+	public OAuth2RestOperations getSecureRestTemplate(){
+		return new OAuth2RestTemplate(resource, oAuth2ClientContext);
 	}
 	
 	@Configuration

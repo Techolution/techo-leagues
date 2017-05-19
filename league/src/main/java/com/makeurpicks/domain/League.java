@@ -1,9 +1,22 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
 public class League extends AbstractModel {
 
 	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1233011118783367458L;
+	
+	@Id
+	@GeneratedValue
+	private String id;
 	
 	private String leagueName;
 	private int paidFor=0;
@@ -27,6 +40,13 @@ public class League extends AbstractModel {
 	private String seasonId;
 	private String adminId;
 	
+	
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getId() {
+		return id;
+	}
 	public String getLeagueName() {
 		return leagueName;
 	}

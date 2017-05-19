@@ -36,9 +36,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: jdbc:mysql://localhost/game
-    username: root
-    password: rage311
+    url: jdbc:mysql://192.168.99.100:3305/game
+    username: dbuser
+    password: password
     driver-class-name: com.mysql.jdbc.Driver
 
 
