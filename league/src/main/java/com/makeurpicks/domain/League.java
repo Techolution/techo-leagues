@@ -1,9 +1,16 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
 public class League extends AbstractModel {
 
 	
+	@Id
+	@GeneratedValue
+	private String id;
 	
 	private String leagueName;
 	private int paidFor=0;
