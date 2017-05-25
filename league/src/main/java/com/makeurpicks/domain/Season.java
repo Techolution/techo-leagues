@@ -2,6 +2,13 @@ package com.makeurpicks.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
 public class Season implements Serializable {
 
 	/**
@@ -9,6 +16,9 @@ public class Season implements Serializable {
 	 */
 	private static final long serialVersionUID = -1686980214059945687L;
 	
+	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
 
 

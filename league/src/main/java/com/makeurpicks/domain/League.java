@@ -1,9 +1,24 @@
 package com.makeurpicks.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
 public class League extends AbstractModel {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -209907341452469485L;
+
+	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private String id;
 	
 	private String leagueName;
 	private int paidFor=0;
@@ -26,6 +41,14 @@ public class League extends AbstractModel {
 	
 	private String seasonId;
 	private String adminId;
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 	public String getLeagueName() {
 		return leagueName;

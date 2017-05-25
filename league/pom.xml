@@ -61,6 +61,10 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
 		
 		<!-- config -->
 		<dependency>
@@ -124,7 +128,11 @@
 			<artifactId>hadoop-core</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+		</dependency>
 	</dependencies>
 
 <!-- 	<dependencyManagement> -->
