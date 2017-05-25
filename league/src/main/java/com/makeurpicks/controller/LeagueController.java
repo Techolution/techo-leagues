@@ -23,7 +23,7 @@ import com.makeurpicks.domain.PlayerLeague;
 import com.makeurpicks.service.LeagueService;
 
 @RestController
-@RequestMapping(value = "")
+@RequestMapping(value = "/leagues")
 public class LeagueController {
 
 	private Log log = LogFactory.getLog(LeagueController.class);
@@ -31,19 +31,18 @@ public class LeagueController {
 	@Autowired
 	private LeagueService leagueService;
 
-	/*
-	 * @RequestMapping("/user")
-	 * 
-	 * @PreAuthorize("hasRole('ADMIN')") public Principal resource(Principal
-	 * principal) { return principal; }
-	 */
+
+	@RequestMapping("/user")
+	@PreAuthorize("hasRole('ADMIN')") public Principal resource(Principal
+			principal) { return principal; }
+
 
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public @ResponseBody Iterable<League> getAllLeague() {
 		return leagueService.getAllLeagues();
 
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/types")
 	public @ResponseBody LeagueType[] getLeagueTypes() {
 		return LeagueType.values();
@@ -54,12 +53,12 @@ public class LeagueController {
 	public @ResponseBody League getLeagueById(@PathVariable String id) {
 		return leagueService.getLeagueById(id);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/seasons/{seasonId}")
 	public @ResponseBody List<League> getLeagueBySeasonId(@PathVariable String seasonId) {
 		return leagueService.getLeagueBySeasonId(seasonId);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/")
 	public @ResponseBody League createLeague(Principal user,
 			@RequestBody League league) {
