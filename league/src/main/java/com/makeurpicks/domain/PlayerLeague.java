@@ -8,11 +8,15 @@ import javax.persistence.Id;
 
 @Entity
 public class PlayerLeague  {
+	
 	@EmbeddedId
 	private PlayerLeagueId id;
+	
 	private String leagueName;
 	private String password;
+	
 	private PlayerLeague() {}
+
 	public PlayerLeague(PlayerLeagueId playerLeagueId) {
 		id = playerLeagueId;
 	}
@@ -46,6 +50,6 @@ public class PlayerLeague  {
 	public void setLeagueName(String leagueName) {
 		this.leagueName = leagueName;
 	}
-	
-	
+
+
 }

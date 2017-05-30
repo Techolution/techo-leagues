@@ -14,7 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +39,10 @@ import com.makeurpicks.domain.PlayerLeague;
 import com.makeurpicks.domain.PlayerLeagueId;
 import com.makeurpicks.service.LeagueService;
 
+/**
+ * @author tarun
+ *
+ */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 public class LeagueControllerTest {
@@ -55,7 +58,6 @@ public class LeagueControllerTest {
 	private League league1;
 	private League league2;
 	private League league3;
-	private Principal principal;
 
 	private ObjectMapper mapper = new ObjectMapper();
 	@Before
@@ -67,13 +69,6 @@ public class LeagueControllerTest {
 
 	private void stubData()
 	{
-		principal = new Principal() {
-			@Override
-			public String getName() {
-				return "ADMIN";
-			}
-		};
-
 		String player1Id = "1";
 
 		league1 = new LeagueBuilder()
@@ -152,7 +147,7 @@ public class LeagueControllerTest {
 	public void testCreateLeague() throws Exception{
 		String json=	"{\"id\":\"4c1326d5-9ffb-49e8-8b84-a86a98e15275\",\"leagueName\":\"pickem\",\"paidFor\":0,\"money\":false,\"free\":false,\"active\":false,\"password\":\"football\",\"spreads\":false,\"doubleEnabled\":true,\"entryFee\":0.0,\"weeklyFee\":0.0,\"firstPlacePercent\":0,\"secondPlacePercent\":0,\"thirdPlacePercent\":0,\"fourthPlacePercent\":0,\"fifthPlacePercent\":0,\"doubleType\":0,\"banker\":false,\"seasonId\":\"1\",\"adminId\":\"1\"}";
 		when(leagueService.createLeague((League)anyObject())).thenReturn(league1);
-		mockMvc.perform(post("/leagues/").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(principal))
+		mockMvc.perform(post("/leagues/").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(()->"admin"))
 		.andExpect(status().isOk())
 		.andExpect(jsonPath("$.id", is(league1.getId())))
 		.andExpect(jsonPath("$.leagueName", is(league1.getLeagueName())))
@@ -186,7 +181,7 @@ public class LeagueControllerTest {
 	@Test
 	public void testAddPlayerToLeague() throws Exception {
 		String json = mapper.writeValueAsString(new PlayerLeague(new PlayerLeagueId("leagueId", "PlayerId")));
-		mockMvc.perform(post("/leagues/player").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(principal))
+		mockMvc.perform(post("/leagues/player").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(()->"admin"))
 		.andExpect(status().isOk())
 		.andDo(print());
 	}
@@ -194,7 +189,7 @@ public class LeagueControllerTest {
 	@Test
 	public void testAddPlayerToLeagueAdmin() throws Exception {
 		String json = mapper.writeValueAsString(new PlayerLeague(new PlayerLeagueId("leagueId", "PlayerId")));
-		mockMvc.perform(post("/leagues/player/admin").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(principal))
+		mockMvc.perform(post("/leagues/player/admin").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(()->"admin"))
 		.andExpect(status().isOk())
 		.andDo(print());
 	}
@@ -212,7 +207,7 @@ public class LeagueControllerTest {
 	@Test
 	public void testRemovePlayerFromLeague() throws Exception {
 		String json = mapper.writeValueAsString(new PlayerLeague(new PlayerLeagueId("leagueId", "PlayerId")));
-		mockMvc.perform(delete("/leagues/player").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(principal))
+		mockMvc.perform(delete("/leagues/player").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON).principal(()->"admin"))
 		.andExpect(status().isOk())
 		.andDo(print());
 	}
@@ -232,7 +227,7 @@ public class LeagueControllerTest {
 
 	@Test
 	public void testDeleteLeague() throws Exception {
-		assertThat(mockMvc.perform(delete("/leagues/leagueID").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).principal(principal))
+		assertThat(mockMvc.perform(delete("/leagues/leagueID").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).principal(()->"admin"))
 				.andExpect(status().isOk())
 				.andDo(print()));
 	}
