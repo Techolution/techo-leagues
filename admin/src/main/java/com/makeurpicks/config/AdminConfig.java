@@ -10,24 +10,30 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * @author tarun
+ *
+ */
 @Configuration
-public class GameConfig {
-
-	@Autowired
-	private OAuth2ClientContext oAuth2ClientContext;
-
-	@Autowired
-	private OAuth2ProtectedResourceDetails resource;
-
+public class AdminConfig {
+	
+	 @Autowired
+	 private OAuth2ClientContext oAuth2ClientContext;
+	 
+	 @Autowired
+	 private OAuth2ProtectedResourceDetails resource;
+	
 	@LoadBalanced
 	@Bean(name = "loadBalancedRestTemplate")
 	public RestTemplate getRestTemplate(){
 		return new RestTemplate();
 	}
-
+	
 	@LoadBalanced
 	@Bean
 	public OAuth2RestOperations getSecureRestTemplate(){
-		return new OAuth2RestTemplate(resource,oAuth2ClientContext);
+		 return new OAuth2RestTemplate(resource,oAuth2ClientContext);
 	}
+	
+	
 }
